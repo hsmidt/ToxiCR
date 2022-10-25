@@ -15,6 +15,8 @@ import warnings
 
 import numpy as np
 import tensorflow as tf
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 # print(tf.__version__)
 from sklearn.model_selection import train_test_split
 from tensorflow.keras import optimizers

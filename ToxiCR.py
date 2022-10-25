@@ -10,10 +10,13 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 import os.path
+import sys
 import pickle
 import pandas as pd
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 from sklearn.model_selection import KFold
+
+sys.path.insert(1, '/home/holm/workspace/ToxiCR')
 
 from ContractionPreprocessor import expand_contraction, rem_special_sym, remove_url
 from ProfanityPreprocessor import PatternTokenizer
@@ -27,6 +30,7 @@ import timeit
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
+dirname = os.path.dirname(__file__)
 
 def read_dataframe_from_excel(file):
     dataframe = pd.read_excel(file)
@@ -35,7 +39,7 @@ def read_dataframe_from_excel(file):
 
 class ToxiCR:
     def __init__(self, ALGO="RF", embedding="tfidf",
-                 model_file="models/code-review-dataset-full.xlsx", split_identifier=False,
+                 model_file=os.path.join(os.path.dirname(__file__),"models/code-review-dataset-full.xlsx"), split_identifier=False,
                  remove_keywords=False, count_profanity=True,
                  count_anger_words=False,
                  count_emoticon=False,
@@ -108,9 +112,10 @@ class ToxiCR:
 
     def getPTMName(self):
         ALGO=self.ALGO
-        filename = "pre-trained/model-" + ALGO + "-" + str(self.embedding) + "-profane-" \
+        filename = "./pre-trained/model-" + ALGO + "-" + str(self.embedding) + "-profane-" \
                    + str(self.count_profanity) + "-keyword-" + str(self.remove_keywords) + "-split-" \
                    + str(self.split_identifier)
+        filename = os.path.join(os.path.dirname(__file__), filename)
         if ((ALGO == "CNN") | (ALGO == "LSTM") | (ALGO == "GRU") | (ALGO == "biLSTM")):
             filename = filename + ".h5"
         elif(ALGO =="BERT"):
@@ -144,9 +149,10 @@ class ToxiCR:
         print("Model stored as: "+filename)
 
     def load_pretrained_model(self, filename):
-        #if not os.path.exists(filename):
-        #    print("File: "+ filename +" not exists!")
-         #   return False
+        if not os.path.exists(filename):
+            print("File: "+ filename +" not exists!")
+            return False
+        print(filename)
         if filename.endswith(".pickle"):
             self.classifier_model = pickle.load(open(filename, "rb"))
             return True
