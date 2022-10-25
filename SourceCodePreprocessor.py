@@ -12,12 +12,13 @@
 
 from ITokenizer import BaseTokenizer, read_lines_from_model
 import re
+import os
 
 
 class IdentifierTokenizer(BaseTokenizer):
     def __init__(self):
 
-        self.programming_keywords_list = read_lines_from_model('models/programming_keywords.txt')
+        self.programming_keywords_list = read_lines_from_model(os.path.join(os.path.dirname(__file__),'models/programming_keywords.txt'))
 
     def split_identifiers(self, text):
         result = re.sub('[_]+', ' ', text) # replace underscores with space

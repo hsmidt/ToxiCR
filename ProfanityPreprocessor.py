@@ -12,6 +12,7 @@
 
 import copy
 import re
+import os
 from nltk import word_tokenize
 from ITokenizer import BaseTokenizer, read_lines_from_model
 
@@ -228,8 +229,8 @@ class PatternTokenizer(BaseTokenizer):
         self.patterns = patterns
         self.initial_filters = initial_filters
         self.remove_repetitions = remove_repetitions
-        self.profanity_list = read_lines_from_model('models/profane-words.txt')
-        self.anger_word_list = read_lines_from_model('models/anger-words.txt')
+        self.profanity_list = read_lines_from_model(os.path.join(os.path.dirname(__file__),'models/profane-words.txt'))
+        self.anger_word_list = read_lines_from_model(os.path.join(os.path.dirname(__file__),'models/anger-words.txt'))
 
     def process_text(self, text):
         x = self._preprocess(text)

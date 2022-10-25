@@ -11,10 +11,11 @@
 # GNU General Public License for more details.
 
 from random import random
-
+import os
 import tensorflow as tf
 import tensorflow_hub as hub
 import  tensorflow_text as text
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 import BertLocator
 import random
 import numpy as np
